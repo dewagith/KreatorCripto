@@ -1,59 +1,61 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>DAHA Tips Form</title>
-</head>
-<body>
-  <h2>Form Donasi Kreator</h2>
-  <form id="donasiForm">
-    <label>Nama:</label><br>
-    <input type="text" id="name" required><br><br>
+  <head>
+    <title>Form Donasi Kreator</title>
+  </head>
+  <body>
+    <h2>Daftarkan Profil Donasi Anda</h2>
+    <form id="kreatorForm">
+      <label>Slug (nama unik di link):</label><br />
+      <input type="text" name="slug" required /><br /><br />
 
-    <label>Alamat Wallet:</label><br>
-    <input type="text" id="wallet" required><br><br>
+      <label>Nama Kreator:</label><br />
+      <input type="text" name="name" required /><br /><br />
 
-    <button type="submit">Kirim</button>
-  </form>
+      <label>Alamat Wallet:</label><br />
+      <input type="text" name="wallet" required /><br /><br />
 
-  <p id="status"></p>
+      <label>Network:</label><br />
+      <select name="network">
+        <option value="solana">Solana</option>
+        <option value="ethereum">Ethereum</option>
+      </select><br /><br />
 
-  <script>
-    const form = document.getElementById("donasiForm");
-    const status = document.getElementById("status");
+      <button type="submit">Kirim Data</button>
+    </form>
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    <p id="status"></p>
 
-      const name = document.getElementById("name").value;
-      const wallet = document.getElementById("wallet").value;
+    <script>
+      const form = document.getElementById("kreatorForm");
+      const status = document.getElementById("status");
 
-      const data = {
-        name,
-        wallet,
-        network: "solana"
-      };
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-      try {
-        const res = await fetch("https://cuqrezozsinibyybxzwo.supabase.co/rest/v1/kreator", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1cXJlem96c2luaWJ5eWJ4endvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA0MjY4MzMsImV4cCI6MjA2NjAwMjgzM30.cOkNqfsC_Gg2_aO1R94ttSDKaRUjul7YAp3P-zhHKUY",
-            "Authorization": "Bearer YOUR_SUPABASE_API_KEY",
-            "Prefer": "return=minimal"
-          },
-          body: JSON.stringify(data)
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+          data[key] = value;
         });
 
-        if (res.ok) {
-          status.textContent = "Data berhasil dikirim!";
-          form.reset();
-        } else {
-          status.textContent = "Gagal mengirim data.";
-        }
-      } catch (err) {
-        status.textContent = "Terjadi kesalahan.";
-      }
-    });
-  </script>
-</body>
+        fetch("https://script.google.com/macros/s/AKfycbxpV2arodqVlda8zVRILz8p6sLzqiMq8zAWnELwZXDijS1fThpHp42Tc4HhLUVlXhQdJA/exec", {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then(() => {
+            status.innerText = "Data berhasil dikirim!";
+            form.reset();
+          })
+          .catch((error) => {
+            status.innerText = "Gagal mengirim data.";
+            console.error(error);
+          });
+      });
+    </script>
+  </body>
+</html>
